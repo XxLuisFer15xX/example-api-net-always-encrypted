@@ -1,6 +1,6 @@
-﻿namespace EXAMPLE_API.Setup
+﻿namespace EXAMPLE_API.Entities.Config
 {
-    public class KeyVaultConfig
+    public class KeyVault
     {
         public string AkvClientId { get; set; }
         public string AkvClientSecretId { get; set; }

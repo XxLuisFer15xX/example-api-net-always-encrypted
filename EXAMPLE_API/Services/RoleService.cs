@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using EXAMPLE_API.Entities.Config;
+using EXAMPLE_API.Entities.Response;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace EXAMPLE_API.Services
@@ -12,7 +14,8 @@ namespace EXAMPLE_API.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<RoleResult> gestion(
+        public async Task<Payload> gestion(
+            Languages lng,
             int pnTipoOperacion,
             string pcUser,
             int? pnIdRole = null,
@@ -21,8 +24,7 @@ namespace EXAMPLE_API.Services
             int? pnStatus = null
         )
         {
-            var roleResult = new RoleResult();
-
+            var payload= new Payload();
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
@@ -59,33 +61,27 @@ namespace EXAMPLE_API.Services
                                 {
                                     row[reader.GetName(i)] = reader.GetValue(i);
                                 }
-                                roleResult.Data.Add(row);
+                                payload.Data.Add(row);
                             }
                         }
 
                         // Obtener valores de los parámetros de salida
-                        roleResult.TypeResult = (int)pnTypeResultParam.Value;
-                        roleResult.Result = pcResultParam.Value as string;
-                        roleResult.Message = pcMessageParam.Value as string;
+                        var pcResult = pcResultParam.Value as string;
+                        payload.TypeResult = (int)pnTypeResultParam.Value;
+                        payload.Message = lng[pcResult].ToString();
+                        payload.Result = pcMessageParam.Value as string;
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                roleResult.TypeResult = 2;
-                roleResult.Result = "ERROR";
-                roleResult.Message = ex.Message;
+                payload.TypeResult = 2;
+                payload.Message = ex.Message;
+                payload.Result = "Error";
+                payload.Data = null;
             }
-
-            return roleResult;
+            return payload;
         }
-    }
-
-    public class RoleResult
-    {
-        public int TypeResult { get; set; }
-        public string Result { get; set; }
-        public string Message { get; set; }
-        public List<Dictionary<string, object>> Data { get; set; } = new List<Dictionary<string, object>>();
     }
 }

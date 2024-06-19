@@ -1,5 +1,8 @@
 ﻿using EXAMPLE_API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using EXAMPLE_API.Entities.Request;
+using EXAMPLE_API.Entities.Config;
 
 namespace EXAMPLE_API.Controllers
 {
@@ -8,10 +11,26 @@ namespace EXAMPLE_API.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private Languages lng;
+        private Languages Lng
+        {
+            get
+            {
+                if (lng == null)
+                {
+                    var lngJson = (string)_httpContextAccessor.HttpContext.Items["languages"];
+                    lng = JsonConvert.DeserializeObject<Languages>(lngJson);
+                }
+                return lng;
+            }
         }
 
         [HttpGet()]
@@ -20,6 +39,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     1,
                     "solanol",
                     null,
@@ -50,6 +70,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     2,
                     "solanol",
                     idUser,
@@ -78,6 +99,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     3,
                     "solanol",
                     null,
@@ -108,6 +130,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     4,
                     "solanol",
                     idUser,
@@ -132,12 +155,13 @@ namespace EXAMPLE_API.Controllers
             }
         }
 
-        [HttpPatch("{idUser}")]
+        [HttpPatch("{idUser}/disable")]
         public async Task<IActionResult> Patch(int idUser)
         {
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     5,
                     "solanol",
                     idUser,
@@ -168,6 +192,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _userService.gestion(
+                    Lng,
                     6,
                     "solanol",
                     idUser,
@@ -192,15 +217,4 @@ namespace EXAMPLE_API.Controllers
             }
         }
     }
-
-    public class UserRequest
-    {
-        public string PcFirstName { get; set; }
-        public string PcLastName { get; set; }
-        public string PcEmail { get; set; }
-        public DateTime? PdBirthdate { get; set; }
-        public int? PnIdRole { get; set; }
-        public int? PnStatus { get; set; }
-    }
-
 }

@@ -1,0 +1,17 @@
+{
+  "BD_SUCCESS_ERROR": "An unexpected error has occurred, please contact technical support. Any requested transactions have been canceled to maintain the integrity of your data.",
+  "BD_SUCCESS_GET": "The information was obtained successfully.",
+  "BD_SUCCESS_CREATE": "The record was created successfully.",
+  "BD_SUCCESS_UPDATE": "The information was updated successfully.",
+  "BD_SUCCESS_DELETE": "The record was successfully deleted.",
+  "BD_SUCCESS_DISABLE": "Registration was successfully disabled.",
+
+  "BD_WARNING_INVALID_OPERATION": "Invalid operation type.",
+  "BD_WARNING_EMPTY_PARAMETERS": "Error, main parameters not found.",
+  "BD_WARNING_EMPTY_PRINCIPAL_PARAMETERS": "Error, parameters not found.",
+
+  "BD_ROLES_INVALID_ID": "Error, the role is not valid.",
+  "BD_USERS_INVALID_ID": "Error, the user is not valid.",
+
+  "_": ""
+}

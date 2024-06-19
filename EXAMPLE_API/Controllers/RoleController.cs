@@ -1,5 +1,8 @@
 ﻿using EXAMPLE_API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using EXAMPLE_API.Entities.Request;
+using EXAMPLE_API.Entities.Config;
 
 namespace EXAMPLE_API.Controllers
 {
@@ -8,10 +11,26 @@ namespace EXAMPLE_API.Controllers
     public class RoleController : ControllerBase
     {
         private readonly RoleService _roleService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RoleController(RoleService roleService)
+        public RoleController(RoleService roleService, IHttpContextAccessor httpContextAccessor)
         {
             _roleService = roleService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private Languages lng;
+        private Languages Lng
+        {
+            get
+            {
+                if (lng == null)
+                {
+                    var lngJson = (string)_httpContextAccessor.HttpContext.Items["languages"];
+                    lng = JsonConvert.DeserializeObject<Languages>(lngJson);
+                }
+                return lng;
+            }
         }
 
         [HttpGet()]
@@ -20,6 +39,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     1,
                     "solanol",
                     null,
@@ -47,6 +67,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     2,
                     "solanol",
                     idRole,
@@ -72,6 +93,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     3,
                     "solanol",
                     null,
@@ -99,6 +121,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     4,
                     "solanol",
                     idRole,
@@ -120,12 +143,13 @@ namespace EXAMPLE_API.Controllers
             }
         }
 
-        [HttpPatch("{idRole}")]
+        [HttpPatch("{idRole}/disable")]
         public async Task<IActionResult> Patch(int idRole)
         {
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     5,
                     "solanol",
                     idRole,
@@ -153,6 +177,7 @@ namespace EXAMPLE_API.Controllers
             try
             {
                 var result = await _roleService.gestion(
+                    Lng,
                     6,
                     "solanol",
                     idRole,
@@ -173,12 +198,5 @@ namespace EXAMPLE_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
-    }
-
-    public class RoleRequest
-    {
-        public string PcName { get; set; }
-        public string PcDescription { get; set; }
-        public int? PnStatus { get; set; }
     }
 }

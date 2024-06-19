@@ -2,21 +2,27 @@ using EXAMPLE_API.Services;
 using Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider;
 using Microsoft.Data.SqlClient;
 using EXAMPLE_API.Setup;
+using EXAMPLE_API.Middlewares;
+using EXAMPLE_API.Entities.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<UserService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.OperationFilter<LanguagesSetup>();
+});
 
 // Key Vault Config
-builder.Services.Configure<KeyVaultConfig>(builder.Configuration.GetSection("KeyVaultConfig"));
-var keyVaultConfig = builder.Configuration.GetSection("KeyVaultConfig").Get<KeyVaultConfig>();
+builder.Services.Configure<KeyVault>(builder.Configuration.GetSection("KeyVaultConfig"));
+var keyVaultConfig = builder.Configuration.GetSection("KeyVaultConfig").Get<KeyVault>();
 KeyVaultSetup.ClientId = keyVaultConfig.AkvClientId;
 KeyVaultSetup.ClientSecretId = keyVaultConfig.AkvClientSecretId;
 
@@ -30,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<LanguagesMiddleware>();
 
 app.UseAuthorization();
 

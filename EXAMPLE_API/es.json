@@ -1,0 +1,17 @@
+{
+  "BD_SUCCESS_ERROR": "Ha ocurrido un error inesperado, favor contactar con soporte técnico. Cualquier transacción solicitada ha sido cancelada para mantener la integridad de sus datos.",
+  "BD_SUCCESS_GET": "Se obtuvo la información exitosamente.",
+  "BD_SUCCESS_CREATE": "Se creó el registro exitosamente.",
+  "BD_SUCCESS_UPDATE": "Se actualizó la información exitosamente.",
+  "BD_SUCCESS_DELETE": "Se eliminó el registro exitosamente.",
+  "BD_SUCCESS_DISABLE": "Se inhabilitó el registro exitosamente.",
+
+  "BD_WARNING_INVALID_OPERATION": "Tipo de operación no válida.",
+  "BD_WARNING_EMPTY_PARAMETERS": "Error, no se encuentran los parámetros principales.",
+  "BD_WARNING_EMPTY_PRINCIPAL_PARAMETERS": "Error, no se encuentran los parámetros.",
+
+  "BD_ROLES_INVALID_ID": "Error, el rol no es válido.",
+  "BD_USERS_INVALID_ID": "Error, el usuario no es válido.",
+
+  "_": ""
+}
